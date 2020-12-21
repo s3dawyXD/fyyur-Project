@@ -507,7 +507,7 @@ def create_artist_submission():
     state = request.form['state']
     phone = request.form['phone']
     genres = request.form.getlist('genres')
-    # image_link = request.form['image_link']
+    image_link = request.form['image_link']
     facebook_link = request.form['facebook_link']
 
     try:
