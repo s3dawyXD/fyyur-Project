@@ -226,12 +226,11 @@ def create_venue_submission():
     state = request.form['state']
     address = request.form['state']
     phone = request.form['phone']
-    image_link = request.form['image_link']
     genres = request.form.getlist('genres')
     facebook_link = request.form['facebook_link']
     # on successful db insert, flash success
     try:
-        db.session.add(Venue(name=name, city=city, state=state, address=address, phone=phone, image_link=image_link,
+        db.session.add(Venue(name=name, city=city, state=state, address=address, phone=phone,
                              genres=genres, facebook_link=facebook_link, seeking_talent=False, seeking_description="Why are we seeking talent?"))
         db.session.commit()
         flash('Venue ' +
@@ -507,12 +506,11 @@ def create_artist_submission():
     state = request.form['state']
     phone = request.form['phone']
     genres = request.form.getlist('genres')
-    image_link = request.form['image_link']
     facebook_link = request.form['facebook_link']
 
     try:
         db.session.add(Artist(name=name, city=city, state=state, phone=phone,
-                              genres=genres, image_link=image_link, facebook_link=facebook_link, seeking_venue=False, seeking_description="Good God, please hire me!"))
+                              genres=genres, facebook_link=facebook_link, seeking_venue=False, seeking_description="Good God, please hire me!"))
         db.session.commit()
         flash('Artist ' + request.form['name'] + ' was successfully listed!')
     except:
