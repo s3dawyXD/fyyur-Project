@@ -177,6 +177,7 @@ def create_venue_form():
 def create_venue_submission():
     # TODO: insert form data as a new Venue record in the db, instead
     # TODO: modify data to be the data object returned from db insertion
+    """
     name = request.form['name']
     city = request.form['city']
     state = request.form['state']
@@ -184,16 +185,17 @@ def create_venue_submission():
     phone = request.form['phone']
     genres = request.form.getlist('genres')
     facebook_link = request.form['facebook_link']
-    # on successful db insert, flash success
+    """
+    form = VenueForm(request.form)
     try:
-        db.session.add(Venue(name=name, city=city, state=state, address=address, phone=phone,
-                             genres=genres, facebook_link=facebook_link, seeking_talent=False, seeking_description="Why are we seeking talent?"))
+        venue = Venue()
+        form.populate_obj(venue)
+        db.session.add(venue)
         db.session.commit()
-        flash('Venue ' +
-              request.form['name'] + ' has been successfully added.')
+        flash('Venue ' +request.form['name'] + ' has been successfully added.')
+    # on successful db insert, flash success
     except:
-        flash('There was an error inserting ' +
-              request.form['name'] + ' as an artist.')
+        flash('There was an error inserting ' + request.form['name'] + ' as an artist.')
         db.session.rollback()
     # TODO: on unsuccessful db insert, flash an error instead.
     # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
@@ -457,16 +459,19 @@ def create_artist_submission():
     # TODO: modify data to be the data object returned from db insertion
 
     # on successful db insert, flash success
+    """
     name = request.form['name']
     city = request.form['city']
     state = request.form['state']
     phone = request.form['phone']
     genres = request.form.getlist('genres')
     facebook_link = request.form['facebook_link']
-
+    """
+    form = ArtistForm(request.form)
     try:
-        db.session.add(Artist(name=name, city=city, state=state, phone=phone,
-                              genres=genres, facebook_link=facebook_link, seeking_venue=False, seeking_description="Good God, please hire me!"))
+        artist = Artist()
+        form.populate_obj(artist)
+        db.session.add(artist)
         db.session.commit()
         flash('Artist ' + request.form['name'] + ' was successfully listed!')
     except:
@@ -513,16 +518,20 @@ def create_shows():
 def create_show_submission():
     # called to create new shows in the db, upon submitting new show listing form
     # TODO: insert form data as a new Show record in the db, instead
+    
     artistID = request.form['artist_id']
     venueID = request.form['venue_id']
     startTime = request.form['start_time']
+    
+    form = ShowForm(request.form)
     # on successful db insert, flash success
     if (len(db.session.query(Artist).filter_by(id=artistID).all()) or len(db.session.query(Venue).filter_by(id=venueID).all())) == 0:
           flash('Error: Either Artist or Venue don\'t exist!')
     else:
         try:
-            db.session.add(
-                Show(venue_id=venueID, artist_id=artistID, start_time=startTime))
+            show = Show()
+            form.populate_obj(show)
+            db.session.add(show)
             db.session.commit()
             flash('Show successfully added!')
         except:
